@@ -7,5 +7,8 @@ namespace ShelterApi.Repositories
 
         public Task<IEnumerable<ShelterSearchResultDto>> SearchAsync(
             string? city, int? minCapacity, bool? isAccessible, bool? isPublic);
+
+        public Task<IEnumerable<ShelterSortedDto>> SortedAsync(string sortBy = "name", bool ascending = true);
     }
+
 }

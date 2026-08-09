@@ -30,5 +30,12 @@ namespace ShelterApi.Controllers
         {
             return Ok(await _repository.SearchAsync(city, minCapacity, isAccessible, isPublic));
         }
+
+        [HttpGet("sorted")]
+        public async Task<ActionResult<IEnumerable<ShelterSortedDto>>> SortedAsync(string sortBy = "name", bool ascending = true)
+        {
+            return Ok(await _repository.SortedAsync(sortBy, ascending));
+        }
+
     }
 }

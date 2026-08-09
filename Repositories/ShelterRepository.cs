@@ -59,5 +59,38 @@ namespace ShelterApi.Repositories
             }).ToListAsync();
 
         }
+
+        public async Task<IEnumerable<ShelterSortedDto>> SortedAsync(string sortBy = "name", bool ascending = true)
+        {
+            sortBy = sortBy.ToLower();
+
+            var query = _context.Shelters.AsQueryable();
+            query = sortBy?.ToLower() switch
+            {
+                "city" => ascending ? query.OrderBy(s => s.Area.City) :
+
+                query.OrderByDescending(p => p.Area.City),
+
+                "capacity" => ascending ? query.OrderBy(s => s.Capacity) :
+
+                query.OrderByDescending(s => s.Capacity),
+
+                _ => query.OrderBy(s => s.Name)
+            };
+            return await query.Select(s => new ShelterSortedDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                City = s.Area.City,
+                Capacity = s.Capacity,
+                BuildingNumber = s.BuildingNumber,
+                Street = s.Street,
+                ShelterType = s.ShelterType,
+                IsAccessible = s.IsAccessible,
+                IsPublic = s.IsPublic     
+            }).ToListAsync();
+
+        }
+
     }
 }
