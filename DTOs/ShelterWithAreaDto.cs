@@ -3,9 +3,9 @@
     public class ShelterWithAreaDto
     {
         public int ShelterId { get; set; }
-        public string ShelterName { get; set; } = string.Empty;
+        public string ShelterName { get; set; } 
         public int Capacity { get; set; }
-        public string City { get; set; } = string.Empty;
-        public string Neighborhood { get; set; } = string.Empty;
+        public string City { get; set; } 
+        public string Neighborhood { get; set; } 
     }
 }

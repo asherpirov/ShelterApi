@@ -20,5 +20,15 @@ namespace ShelterApi.Controllers
         {
             return Ok(await _repository.GetAllAsync());
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<ShelterSearchResultDto>>> SearchAsync(
+            [FromQuery] string? city,
+            [FromQuery] int? minCapacity,
+            [FromQuery] bool? isAccessible,
+            [FromQuery] bool? isPublic)
+        {
+            return Ok(await _repository.SearchAsync(city, minCapacity, isAccessible, isPublic));
+        }
     }
 }
