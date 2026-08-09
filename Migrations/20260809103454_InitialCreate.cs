@@ -50,7 +50,8 @@ namespace ShelterApi.Migrations
                     Capacity = table.Column<int>(type: "int", nullable: false),
                     IsAccessible = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     IsPublic = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ShelterType = table.Column<int>(type: "int", nullable: false),
+                    ShelterType = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     AreaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -73,6 +74,7 @@ namespace ShelterApi.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     InspectionDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Passed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ReadinessScore = table.Column<int>(type: "int", nullable: false),
                     DefectsCount = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),

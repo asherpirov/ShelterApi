@@ -71,6 +71,9 @@ namespace ShelterApi.Migrations
                     b.Property<bool>("Passed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("ReadinessScore")
+                        .HasColumnType("int");
+
                     b.Property<int>("ShelterId")
                         .HasColumnType("int");
 
@@ -109,8 +112,10 @@ namespace ShelterApi.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<int>("ShelterType")
-                        .HasColumnType("int");
+                    b.Property<string>("ShelterType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Street")
                         .IsRequired()
