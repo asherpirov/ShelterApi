@@ -60,26 +60,21 @@ namespace ShelterApi.Repositories
 
         }
 
-        public async Task<IEnumerable<ShelterSortedDto>> SortedAsync(string sortBy = "name", bool ascending = true)
+        public async Task<IEnumerable<ShelterSortedDto>> SortedAsync(string? sortBy, bool ascending = true)
         {
-            sortBy = sortBy.ToLower();
-
             var query = _context.Shelters.AsQueryable();
             query = sortBy?.ToLower() switch
             {
                 "city" => ascending ? query.OrderBy(s => s.Area.City) :
-
                 query.OrderByDescending(p => p.Area.City),
 
                 "capacity" => ascending ? query.OrderBy(s => s.Capacity) :
-
                 query.OrderByDescending(s => s.Capacity),
 
                 _ => query.OrderBy(s => s.Name)
             };
             return await query.Select(s => new ShelterSortedDto
             {
-                Id = s.Id,
                 Name = s.Name,
                 City = s.Area.City,
                 Capacity = s.Capacity,
@@ -90,6 +85,65 @@ namespace ShelterApi.Repositories
                 IsPublic = s.IsPublic     
             }).ToListAsync();
 
+        }
+
+        public async Task<IEnumerable<ShelterWithInspectionCountDto>> GetShelterWithInspectionCountAsync()
+        {
+            return await _context.Shelters.Select(s => new ShelterWithInspectionCountDto
+            {
+                ShelterId = s.Id,
+                ShelterName = s.Name,
+                InspectionCount = s.Inspections.Count
+            }).ToListAsync();
+        }
+
+        public async Task<IEnumerable<ShelterTypeAverageDto>> GetAverageScoreByTypeAsync()
+        {
+            return await _context.Inspections.GroupBy(a => a.Shelter.ShelterType)
+                .Select(s => new ShelterTypeAverageDto
+            {
+                ShelterType = s.Key,
+                AverageReadinessScore = s.Average(s => s.ReadinessScore),
+                TotalInspections = s.Sum(s => s.Shelter.Inspections.Count())
+            }).ToListAsync();
+        }
+
+        public async Task<PagedResultDto<ShelterDetailDto>> GetPagination(int page = 1, int pageSize = 10)
+        {
+            if (page < 1)
+            {
+                page = 1;
+            }
+            if (pageSize < 5)
+            {
+                pageSize = 5;
+            }
+            else if (pageSize > 50)
+            {
+                pageSize = 50;
+            }
+
+
+            var totalCount = await _context.Shelters.CountAsync();
+
+            var items = await _context.Shelters
+               .OrderBy(s => s.Name)
+               .Skip((page -1) * pageSize)
+               .Take(pageSize)
+               .Select(s => new ShelterDetailDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Capacity = s.Capacity
+            }).ToListAsync();
+
+            return new PagedResultDto<ShelterDetailDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page, 
+                PageSize = pageSize
+            };
         }
 
     }

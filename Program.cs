@@ -18,6 +18,9 @@ builder.Services.AddDbContext<ShelterDbContext>(options =>
 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddScoped<IShelterRepository, ShelterRepository>();
+builder.Services.AddScoped<IInspectionsRepository, InspectionsRepository>();
+builder.Services.AddScoped<IAreasRepository, AreaRepository>();
+
 
 var app = builder.Build();
 

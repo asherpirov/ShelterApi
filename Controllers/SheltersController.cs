@@ -37,5 +37,25 @@ namespace ShelterApi.Controllers
             return Ok(await _repository.SortedAsync(sortBy, ascending));
         }
 
+        [HttpGet("with-inspection-count")]
+        public async Task<ActionResult<IEnumerable<ShelterWithInspectionCountDto>>> GetShelterWithInspectionCountAsync()
+        {
+            return Ok(await _repository.GetShelterWithInspectionCountAsync());
+        }
+
+        [HttpGet("average-score-by-type")]
+        public async Task<ActionResult<IEnumerable<ShelterTypeAverageDto>>> GetAverageScoreByTypeAsync()
+        {
+            return Ok(await _repository.GetAverageScoreByTypeAsync());
+        }
+
+        [HttpGet("paged")]
+        public async Task<ActionResult<PagedResultDto<ShelterDetailDto>>> GetPagination(
+           [FromQuery] int page = 1,
+           [FromQuery] int pageSize = 10)
+        {
+            return Ok(await _repository.GetPagination(page, pageSize));
+        }
+
     }
 }
