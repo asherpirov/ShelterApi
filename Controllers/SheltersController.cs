@@ -1,0 +1,67 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using ShelterApi.DTOs;
+using ShelterApi.Repositories;
+
+namespace ShelterApi.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class SheltersController : ControllerBase
+    {
+        private readonly IShelterRepository _repository;
+
+        public SheltersController(IShelterRepository repository)
+        {
+            _repository = repository;
+        }
+
+        [HttpGet("with-area")]
+        public async Task<ActionResult<IEnumerable<ShelterWithAreaDto>>> GetShelterWithAreaAsync()
+        {
+            return Ok(await _repository.GetAllAsync());
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<ShelterSearchResultDto>>> SearchAsync(
+            [FromQuery] string? city,
+            [FromQuery] int? minCapacity,
+            [FromQuery] bool? isAccessible,
+            [FromQuery] bool? isPublic)
+        {
+            return Ok(await _repository.SearchAsync(city, minCapacity, isAccessible, isPublic));
+        }
+
+        [HttpGet("sorted")]
+        public async Task<ActionResult<IEnumerable<ShelterSortedDto>>> SortedAsync(string sortBy = "name", bool ascending = true)
+        {
+            return Ok(await _repository.SortedAsync(sortBy, ascending));
+        }
+
+        [HttpGet("with-inspection-count")]
+        public async Task<ActionResult<IEnumerable<ShelterWithInspectionCountDto>>> GetShelterWithInspectionCountAsync()
+        {
+            return Ok(await _repository.GetShelterWithInspectionCountAsync());
+        }
+
+        [HttpGet("average-score-by-type")]
+        public async Task<ActionResult<IEnumerable<ShelterTypeAverageDto>>> GetAverageScoreByTypeAsync()
+        {
+            return Ok(await _repository.GetAverageScoreByTypeAsync());
+        }
+
+        [HttpGet("paged")]
+        public async Task<ActionResult<PagedResultDto<ShelterDetailDto>>> GetPagination(
+           [FromQuery] int page = 1,
+           [FromQuery] int pageSize = 10)
+        {
+            return Ok(await _repository.GetPagination(page, pageSize));
+        }
+
+        [HttpGet("latest-inspection")]
+        public async Task<ActionResult<IEnumerable<ShelterLatestInspectionDto?>>> GetShelterLatestInspection()
+        {
+            return Ok(await _repository.GetShelterLatestInspection());
+        }
+
+    }
+}
