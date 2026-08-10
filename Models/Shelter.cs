@@ -1,5 +1,4 @@
-﻿using ShelterApi.Models.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ShelterApi.Models
 {
@@ -29,7 +28,9 @@ namespace ShelterApi.Models
         public bool IsPublic { get; set; } = false;
 
         [Required]
-        public ShelterTypes ShelterType { get; set; }
+        [MaxLength(50)]
+        [AllowedValues("PublicBuilding", "School", "Parking", "Residential", "Commercial")]
+        public string ShelterType { get; set; } = string.Empty;
 
         [Required]
         public int AreaId { get; set; }

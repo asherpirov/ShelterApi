@@ -1,5 +1,4 @@
-﻿using ShelterApi.Models.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ShelterApi.Models
 {
@@ -14,6 +13,9 @@ namespace ShelterApi.Models
         [Required]
         public bool Passed { get; set; } = false;
 
+        [Required]
+        [Range(0, 100)]
+        public int ReadinessScore { get; set; }
 
         [Required]
         [Range(0,100)]
