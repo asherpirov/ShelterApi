@@ -14,8 +14,11 @@ namespace ShelterApi.Repositories
 
         public Task<IEnumerable<ShelterTypeAverageDto>> GetAverageScoreByTypeAsync();
 
-        public Task<IEnumerable<PagedResultDto<ShelterWithAreaDto>>>
-            GetPagination(int page = 1, int pageSize = 10);
-    }
+        public Task<PagedResultDto<ShelterDetailDto>> GetPagination(int page = 1, int pageSize = 10);
 
+        public Task<IEnumerable<ShelterLatestInspectionDto>> GetShelterLatestInspection();
+    }
 }
+
+
+    

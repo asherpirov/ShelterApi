@@ -103,8 +103,8 @@ namespace ShelterApi.Repositories
                 .Select(s => new ShelterTypeAverageDto
             {
                 ShelterType = s.Key,
-                AverageReadinessScore = s.Average(s => s.ReadinessScore),
-                TotalInspections = s.Sum(s => s.Shelter.Inspections.Count())
+                AverageReadinessScore = s.Average(i => i.ReadinessScore),
+                TotalInspections = s.Count()
             }).ToListAsync();
         }
 
@@ -122,7 +122,6 @@ namespace ShelterApi.Repositories
             {
                 pageSize = 50;
             }
-
 
             var totalCount = await _context.Shelters.CountAsync();
 
@@ -142,8 +141,24 @@ namespace ShelterApi.Repositories
                 Items = items,
                 TotalCount = totalCount,
                 Page = page, 
-                PageSize = pageSize
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+
             };
+        }
+
+        public async Task<IEnumerable<ShelterLatestInspectionDto?>> GetShelterLatestInspection()
+        {
+            var query = await _context.Shelters
+             .Select(s => new ShelterLatestInspectionDto
+             {
+                 ShelterId = s.Id,
+                 ShelterName = s.Name,
+                 LatestInspectionDate = s.Inspections.OrderByDescending(i => i.InspectionDate).FirstOrDefault().InspectionDate,
+                 LatestReadinessScore = s.Inspections.OrderByDescending(i => i.ReadinessScore).FirstOrDefault().ReadinessScore
+             }).ToListAsync();
+
+            return query;
         }
 
     }

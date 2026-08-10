@@ -57,5 +57,11 @@ namespace ShelterApi.Controllers
             return Ok(await _repository.GetPagination(page, pageSize));
         }
 
+        [HttpGet("latest-inspection")]
+        public async Task<ActionResult<IEnumerable<ShelterLatestInspectionDto?>>> GetShelterLatestInspection()
+        {
+            return Ok(await _repository.GetShelterLatestInspection());
+        }
+
     }
 }
