@@ -154,8 +154,8 @@ namespace ShelterApi.Repositories
              {
                  ShelterId = s.Id,
                  ShelterName = s.Name,
-                 LatestInspectionDate = s.Inspections.OrderByDescending(i => i.InspectionDate).FirstOrDefault().InspectionDate,
-                 LatestReadinessScore = s.Inspections.OrderByDescending(i => i.ReadinessScore).FirstOrDefault().ReadinessScore
+                 LatestInspectionDate = s.Inspections.Count() > 0 ? s.Inspections.OrderByDescending(i => i.InspectionDate).FirstOrDefault()!.InspectionDate : null,
+                 LatestReadinessScore = s.Inspections.Count() > 0 ? s.Inspections.OrderByDescending(i => i.InspectionDate).FirstOrDefault()!.ReadinessScore : null
              }).ToListAsync();
 
             return query;
